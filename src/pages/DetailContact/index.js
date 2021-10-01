@@ -5,11 +5,11 @@ import CustomTextInput from '../../components/CustomTextInput';
 import ButtonSubmit from '../../components/ButtonSubmit';
 import PpDummy from '../../assets/image/ppdummy.png';
 import {
-  getContact,
   getAllContact,
   updateContactData,
   deleteContactData,
 } from '../../redux/action/contact';
+import {createButtonAlert} from '../../components/CustomAlert';
 
 const DetailContact = ({route, navigation}) => {
   const {id} = route.params;
@@ -24,11 +24,6 @@ const DetailContact = ({route, navigation}) => {
     age: 0,
     photo: '',
   });
-
-  const createButtonAlert = (title, msg) =>
-    Alert.alert(title, msg, [
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
 
   const changeText = (label, value) => {
     const newValue =
@@ -49,7 +44,6 @@ const DetailContact = ({route, navigation}) => {
       })
       .finally(() => {
         setIsUpdate(false);
-        dispatch(getContact(id));
         dispatch(getAllContact());
       });
   };
@@ -86,6 +80,7 @@ const DetailContact = ({route, navigation}) => {
       ...contact,
       ...selectedContact,
     });
+    setIsErrorLoad(false);
   }, [selectedContact]);
 
   return (

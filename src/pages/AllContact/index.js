@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView, Text} from 'react-native';
 import ContactItem from '../../components/ContactItem';
 import {getContact, getAllContact} from '../../redux/action/contact';
 
@@ -19,6 +19,7 @@ const AllContact = ({navigation}) => {
 
   return (
     <ScrollView style={styles.container}>
+      {allContact.length === 0 ? <Text>Loading...</Text> : null}
       {allContact.map((item, index) => {
         return (
           <ContactItem
