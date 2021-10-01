@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, ScrollView} from 'react-native';
+import {StyleSheet, View, Image, ScrollView} from 'react-native';
+import {useDispatch} from 'react-redux';
 import CustomTextInput from '../../components/CustomTextInput';
 import ButtonSubmit from '../../components/ButtonSubmit';
+import {createButtonAlert} from '../../components/CustomAlert';
+import {postContactData, getAllContact} from '../../redux/action/contact';
 import PpDummy from '../../assets/image/ppdummy.png';
 
-const AddContact = () => {
+const AddContact = ({navigation}) => {
+  const dispatch = useDispatch();
   const [newContact, setNewContact] = useState({
     firstName: '',
     lastName: '',
@@ -22,7 +26,15 @@ const AddContact = () => {
   };
 
   const submitNewContact = () => {
-    console.log(newContact);
+    postContactData(newContact)
+      .then(res => {
+        createButtonAlert('Done', res.data.message);
+        dispatch(getAllContact());
+        navigation.navigate('MainApp', {screen: 'AllContact'});
+      })
+      .catch(err => {
+        createButtonAlert('Failed', err.response.data.message);
+      });
   };
 
   return (

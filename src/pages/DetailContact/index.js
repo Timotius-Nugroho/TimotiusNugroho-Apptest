@@ -25,7 +25,7 @@ const DetailContact = ({route, navigation}) => {
     photo: '',
   });
 
-  const createTwoButtonAlert = (title, msg) =>
+  const createButtonAlert = (title, msg) =>
     Alert.alert(title, msg, [
       {text: 'OK', onPress: () => console.log('OK Pressed')},
     ]);
@@ -42,10 +42,10 @@ const DetailContact = ({route, navigation}) => {
   const updateContact = () => {
     updateContactData(id, contact)
       .then(res => {
-        createTwoButtonAlert('Done', res.data.message);
+        createButtonAlert('Done', res.data.message);
       })
       .catch(err => {
-        createTwoButtonAlert('Failed', err.response.data.message);
+        createButtonAlert('Failed', err.response.data.message);
       })
       .finally(() => {
         setIsUpdate(false);
@@ -62,11 +62,11 @@ const DetailContact = ({route, navigation}) => {
   const deleteContact = () => {
     deleteContactData(id)
       .then(res => {
-        createTwoButtonAlert('Done', res.data.message);
+        createButtonAlert('Done', res.data.message);
         dispatch(getAllContact());
       })
       .catch(err => {
-        createTwoButtonAlert('Failed', err.response.data.message);
+        createButtonAlert('Failed', err.response.data.message);
       })
       .finally(() => {
         navigation.navigate('MainApp');

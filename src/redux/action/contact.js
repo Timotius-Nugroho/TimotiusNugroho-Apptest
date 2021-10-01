@@ -16,6 +16,15 @@ export const getContact = id => {
   };
 };
 
+export const postContactData = async setData => {
+  try {
+    const res = await axios.post(`${baseUrl}/contact`, setData);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const updateContactData = async (id, setData) => {
   try {
     const res = await axios.put(`${baseUrl}/contact/${id}`, setData);
