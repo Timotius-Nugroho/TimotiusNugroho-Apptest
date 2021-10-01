@@ -1,9 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
-const ContactItem = ({name, imageUrl, goToDetail}) => {
+const ContactItem = ({name, imageUrl, goToDetail, id}) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={goToDetail}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        goToDetail(id);
+      }}>
       <View style={styles.imgContainer}>
         <Image style={styles.profile} source={{uri: imageUrl}} />
       </View>
@@ -18,7 +22,7 @@ export default ContactItem;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 2,
+    marginVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',

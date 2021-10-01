@@ -27,7 +27,11 @@ const Router = () => {
         component={Splash}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="DetailContact" component={DetailContact} />
+      <Stack.Screen
+        name="DetailContact"
+        component={DetailContact}
+        initialParams={{id: null}}
+      />
       <Stack.Screen
         name="MainApp"
         component={MainApp}

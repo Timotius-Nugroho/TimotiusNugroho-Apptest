@@ -1,19 +1,35 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, ScrollView} from 'react-native';
 import ContactItem from '../../components/ContactItem';
+import {getContact, getAllContact} from '../../redux/action/contact';
 
-const AllContact = () => {
-  const goToDetail = () => {
-    console.log('goTo');
+const AllContact = ({navigation}) => {
+  const {allContact} = useSelector(state => state.contact);
+  const dispatch = useDispatch();
+
+  const goToDetail = id => {
+    dispatch(getContact(id));
+    navigation.navigate('DetailContact', {id: id});
   };
+
+  useEffect(() => {
+    dispatch(getAllContact());
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
-      <ContactItem
-        name="Udin Sukarjo"
-        imageUrl="https://i.vimeocdn.com/portrait/58832_300x300.jpg"
-        goToDetail={goToDetail}
-      />
+      {allContact.map((item, index) => {
+        return (
+          <ContactItem
+            key={index}
+            name={`${item.firstName} ${item.lastName}`}
+            imageUrl={item.photo}
+            goToDetail={goToDetail}
+            id={item.id}
+          />
+        );
+      })}
     </ScrollView>
   );
 };

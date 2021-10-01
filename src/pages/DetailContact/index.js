@@ -1,10 +1,21 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Image, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {StyleSheet, View, Image, ScrollView, Alert} from 'react-native';
 import CustomTextInput from '../../components/CustomTextInput';
 import ButtonSubmit from '../../components/ButtonSubmit';
 import PpDummy from '../../assets/image/ppdummy.png';
+import {
+  getContact,
+  getAllContact,
+  updateContactData,
+  deleteContactData,
+} from '../../redux/action/contact';
 
-const DetailContact = () => {
+const DetailContact = ({route, navigation}) => {
+  const {id} = route.params;
+  const {selectedContact} = useSelector(state => state.contact);
+  const dispatch = useDispatch();
+
   const [isUpdate, setIsUpdate] = useState(false);
   const [isErrorLoad, setIsErrorLoad] = useState(false);
   const [contact, setContact] = useState({
@@ -13,6 +24,11 @@ const DetailContact = () => {
     age: 0,
     photo: '',
   });
+
+  const createTwoButtonAlert = (title, msg) =>
+    Alert.alert(title, msg, [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
 
   const changeText = (label, value) => {
     const newValue =
@@ -24,30 +40,64 @@ const DetailContact = () => {
   };
 
   const updateContact = () => {
-    console.log('UPDATE');
+    updateContactData(id, contact)
+      .then(res => {
+        createTwoButtonAlert('Done', res.data.message);
+      })
+      .catch(err => {
+        createTwoButtonAlert('Failed', err.response.data.message);
+      })
+      .finally(() => {
+        setIsUpdate(false);
+        dispatch(getContact(id));
+        dispatch(getAllContact());
+      });
   };
 
   const cancelUpdateContact = () => {
-    console.log('CANCEL');
     setIsUpdate(false);
+    setContact(selectedContact);
   };
 
   const deleteContact = () => {
-    console.log('DELETE');
+    deleteContactData(id)
+      .then(res => {
+        createTwoButtonAlert('Done', res.data.message);
+        dispatch(getAllContact());
+      })
+      .catch(err => {
+        createTwoButtonAlert('Failed', err.response.data.message);
+      })
+      .finally(() => {
+        navigation.navigate('MainApp');
+      });
   };
+
+  useEffect(() => {
+    dispatch(getAllContact());
+  }, []);
+
+  useEffect(() => {
+    if (selectedContact.id) {
+      delete selectedContact.id;
+    }
+
+    setContact({
+      ...contact,
+      ...selectedContact,
+    });
+  }, [selectedContact]);
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Image
-          source={
-            isErrorLoad
-              ? PpDummy
-              : {uri: 'https://i.vimeocdn.com/portrait/58832_300x300.jpg'}
-          }
-          onError={() => setIsErrorLoad(true)}
-          style={styles.profile}
-        />
+        {contact.photo ? (
+          <Image
+            source={isErrorLoad ? PpDummy : {uri: contact.photo}}
+            onError={() => setIsErrorLoad(true)}
+            style={styles.profile}
+          />
+        ) : null}
         <CustomTextInput
           label="firstName"
           value={contact.firstName}
