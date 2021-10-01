@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://simple-contact-crud.herokuapp.com';
+export const baseUrl = 'https://simple-contact-crud.herokuapp.com';
 
 export const getAllContact = () => {
   return {

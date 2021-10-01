@@ -88,6 +88,7 @@ const DetailContact = ({route, navigation}) => {
       <View style={styles.container}>
         {contact.photo ? (
           <Image
+            testID="image-detail"
             source={isErrorLoad ? PpDummy : {uri: contact.photo}}
             onError={() => setIsErrorLoad(true)}
             style={styles.profile}
